@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Navigate Prototype</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Menu</h2>
+    <ul>
+      <li><a href="#" id="menuMarketSheet">Market Sheet</a></li>
+    </ul>
+  </div>
+
+  <!-- Top Grey Banner / Global Header -->
+  <div id="globalHeader">
+    <div class="header-content">
+      <h1>Navigate Prototype</h1>
+    </div>
+  </div>
+
+  <!-- Main Content Area -->
+  <div class="main-container">
+    <!-- Only one tab for now: Market Sheet -->
+    <div id="tabMarketSheet" class="tab-content active">
+      <h3>Market Sheet</h3>
+      <!-- This container will be populated by the Market Sheet module -->
+      <div id="marketSheetContainer">
+        <!-- Placeholder content -->
+        <p>This is the Market Sheet. (Placeholder)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fixed Zoom Controls -->
+  <div id="globalZoom">
+    <button id="zoomIn">Zoom In</button>
+    <button id="zoomOut">Zoom Out</button>
+    <button id="zoomReset">Reset Zoom</button>
+  </div>
+
+  <!-- Scripts -->
+  <script src="renderer.js"></script>
+  <script src="modules/marketSheet.js"></script>
+</body>
+</html>

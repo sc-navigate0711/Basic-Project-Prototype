@@ -1,0 +1,80 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 200px;
+    bottom: 0;
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+  }
+  .sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .sidebar ul {
+    list-style: none;
+  }
+  .sidebar ul li {
+    margin: 10px 0;
+  }
+  .sidebar ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  /* Global Header (Top Grey Banner) */
+  #globalHeader {
+    position: fixed;
+    top: 0;
+    left: 200px; /* next to sidebar */
+    right: 0;
+    height: 100px;
+    background: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+  }
+  .header-content h1 {
+    font-size: 2rem;
+  }
+  
+  /* Main Content Area */
+  .main-container {
+    margin-top: 100px; /* below header */
+    margin-left: 200px; /* next to sidebar */
+    padding: 20px;
+  }
+  
+  /* Tab Content */
+  .tab-content {
+    display: none;
+  }
+  .tab-content.active {
+    display: block;
+  }
+  
+  /* Zoom Controls */
+  #globalZoom {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+  }
+  #globalZoom button {
+    padding: 5px 10px;
+    margin-left: 5px;
+  }
+  
