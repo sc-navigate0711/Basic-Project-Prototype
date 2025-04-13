@@ -1,41 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Navigate Prototype</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* Sidebar Footer: Position these buttons at the bottom of the fixed sidebar */
+    .sidebar-footer {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      width: calc(100% - 40px);
+      text-align: center;
+    }
+    /* Updated button styles using inline SVG icons and labels */
+    .sidebar-footer button {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      margin: 0 10px;
+      display: inline-block;
+    }
+    .sidebar-footer button .btn-icon {
+      display: block;
+      margin: 0 auto;
+      width: 24px;
+      height: 24px;
+    }
+    .sidebar-footer button .btn-label {
+      font-size: 12px;
+      margin-top: 5px;
+    }
+    /* Make the sidebar header clickable */
+    .sidebar h2 {
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <!-- Sidebar -->
   <div class="sidebar">
-    <h2>Menu</h2>
+    <h2 id="navHeader">Navigate</h2>
     <ul>
       <li><a href="#" id="menuMarketSheet">Market Sheet</a></li>
+      <li><a href="#" id="menuEmailDrafting">Email Drafting</a></li>
     </ul>
+    <!-- Sidebar Footer with Save and Exit Buttons -->
+    <div class="sidebar-footer">
+      <button id="saveButton" title="Save">
+        <div class="btn-icon">
+          <!-- Save Icon SVG (white) -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+            <path d="M17,3H5C3.89,3 3,3.89 3,5V19C3,20.1 3.89,21 5,21H19C20.1,21 21,20.1 21,19V7L17,3M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M16,9H5V5H16V9Z" />
+          </svg>
+        </div>
+        <div class="btn-label">Save</div>
+      </button>
+      <button id="exitButton" title="Exit">
+        <div class="btn-icon">
+          <!-- Exit Icon SVG (white) -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
+            <path d="M20,3H4A1,1 0 0,0 3,4V20A1,1 0 0,0 4,21H20A1,1 0 0,0 21,20V4A1,1 0 0,0 20,3M10,16H8V8H10V16Z" />
+          </svg>
+        </div>
+        <div class="btn-label">Exit</div>
+      </button>
+    </div>
   </div>
 
-  <!-- Top Grey Banner / Global Header -->
+  <!-- Top Grey Banner / Global Header (unchanged) -->
   <div id="globalHeader">
     <div class="header-content">
-      <h1>Navigate Prototype</h1>
+      <div class="header-left">
+        <input type="text" id="placementTitle" placeholder="Placement Name - Year" />
+      </div>
+      <div class="header-right">
+        <div id="logoArea">
+          <label for="logoUpload" id="logoLabel">Upload Logo</label>
+          <input type="file" id="logoUpload" accept="image/*" />
+          <img id="logoPreview" src="" alt="" style="display: none;" />
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- Main Content Area -->
   <div class="main-container">
-    <!-- Only one tab for now: Market Sheet -->
+    <!-- Market Sheet Tab Container (visible by default) -->
     <div id="tabMarketSheet" class="tab-content active">
       <h3>Market Sheet</h3>
-      <!-- This container will be populated by the Market Sheet module -->
       <div id="marketSheetContainer">
-        <!-- Placeholder content -->
         <p>This is the Market Sheet. (Placeholder)</p>
       </div>
+      <button id="draftEmailsButton">Draft Emails</button>
     </div>
+
+    <!-- Email Drafting Tab Container (hidden by default, for testing you can add active) -->
+    <div id="emailDraftingTabContainer" class="tab-content"></div>
   </div>
 
-  <!-- Fixed Zoom Controls -->
+  <!-- Fixed Zoom Controls (unchanged) -->
   <div id="globalZoom">
     <button id="zoomIn">Zoom In</button>
     <button id="zoomOut">Zoom Out</button>
@@ -45,5 +111,95 @@
   <!-- Scripts -->
   <script src="renderer.js"></script>
   <script src="modules/marketSheet.js"></script>
+  <script src="modules/layerTable.js"></script>
+  <script src="modules/marketSheetTable.js"></script>
+  <script src="modules/emailDrafting.js"></script>
+  <script src="modules/emailPreview.js"></script>
+  <script>
+    // Global flag to indicate if there are unsaved changes.
+    let unsavedChanges = false;
+    
+    // Example: Set unsavedChanges to true when any input changes.
+    document.addEventListener('input', () => {
+      unsavedChanges = true;
+    });
+
+    // Save function: Replace the alert below with your actual save logic.
+    function saveProgress() {
+      alert('Progress saved.');
+      unsavedChanges = false;
+    }
+
+    // Exit function: Prompts the user if there are unsaved changes before exiting to dashboard.
+    function exitToDashboard() {
+      if (unsavedChanges) {
+        if (confirm("You have unsaved changes. Do you want to save before exiting?")) {
+          saveProgress();
+          window.location.href = 'dashboard.html';
+        } else {
+          if (confirm("Are you sure you want to exit without saving?")) {
+            window.location.href = 'dashboard.html';
+          }
+        }
+      } else {
+        window.location.href = 'dashboard.html';
+      }
+    }
+
+    // Add event listeners for Save and Exit buttons.
+    document.getElementById('saveButton').addEventListener('click', function() {
+      saveProgress();
+    });
+
+    document.getElementById('exitButton').addEventListener('click', function() {
+      exitToDashboard();
+    });
+
+    // Make "Navigate" clickable to show the Market Sheet Tab.
+    document.getElementById('navHeader').addEventListener('click', function() {
+      document.getElementById('tabMarketSheet').classList.add('active');
+      document.getElementById('emailDraftingTabContainer').classList.remove('active');
+    });
+
+    // Sidebar tab switching.
+    document.getElementById('menuMarketSheet').addEventListener('click', function (e) {
+      e.preventDefault();
+      document.getElementById('tabMarketSheet').classList.add('active');
+      document.getElementById('emailDraftingTabContainer').classList.remove('active');
+    });
+    document.getElementById('menuEmailDrafting').addEventListener('click', function (e) {
+      e.preventDefault();
+      document.getElementById('tabMarketSheet').classList.remove('active');
+      document.getElementById('emailDraftingTabContainer').classList.add('active');
+    });
+
+    // Draft Emails Button: switch tabs.
+    document.getElementById('draftEmailsButton').addEventListener('click', function () {
+      document.getElementById('tabMarketSheet').classList.remove('active');
+      document.getElementById('emailDraftingTabContainer').classList.add('active');
+      window.scrollTo(0, 0);
+    });
+
+    // Logo preview script.
+    const logoUpload = document.getElementById('logoUpload');
+    const logoPreview = document.getElementById('logoPreview');
+    const logoLabel = document.getElementById('logoLabel');
+    logoUpload.addEventListener('change', function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          logoPreview.src = e.target.result;
+          logoPreview.style.display = 'block';
+          logoLabel.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+      } else {
+        logoPreview.src = '';
+        logoPreview.style.display = 'none';
+        logoLabel.style.display = 'block';
+      }
+    });
+  </script>
 </body>
 </html>
