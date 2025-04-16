@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Your App</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 200px;
+      background: #001f3f;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .sidebar h2 {
+      margin: 0 0 20px;
+      cursor: pointer;
+    }
+    .sidebar a {
+      color: white;
+      text-decoration: none;
+      margin-bottom: 10px;
+      display: block;
+    }
+    .sidebar a:hover { text-decoration: underline; }
+
+    /* Main Content */
+    .main-content {
+      position: relative;
+      margin-left: 200px;
+      padding: 20px 100px 20px 20px;
+      overflow-y: auto;
+      height: 100vh;
+      box-sizing: border-box;
+    }
+    .main-content h1 {
+      margin: 0 0 20px;
+      font-size: 24px;
+    }
+
+    /* Controls */
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .controls-left input {
+      width: 200px;
+      padding: 6px;
+      font-size: 14px;
+    }
+    .controls-right {
+      display: flex;
+      align-items: center;
+    }
+    .controls-right label {
+      margin-left: 20px;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+    .controls-right select {
+      width: 120px;
+      padding: 6px;
+      margin-left: 5px;
+      font-size: 14px;
+    }
+
+    /* Table: fixed width */
+    #projectTable {
+      width: 680px;
+      min-width: 680px;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin-bottom: 20px;
+    }
+    #projectTable th,
+    #projectTable td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    #projectTable th { background-color: #001f3f; color: #fff; }
+    /* Column widths */
+    #projectTable th:nth-child(1), td:nth-child(1) { width: 300px; text-align: left; }
+    #projectTable th:nth-child(2), td:nth-child(2) { width: 80px; text-align: center; }
+    #projectTable th:nth-child(3), td:nth-child(3),
+    #projectTable th:nth-child(4), td:nth-child(4),
+    #projectTable th:nth-child(5), td:nth-child(5) { width: 100px; text-align: center; }
+    #projectTable td button {
+      width: 100%;
+      padding: 4px 6px;
+      font-size: 12px;
+      margin: 0 auto;
+      display: block;
+      box-sizing: border-box;
+      white-space: nowrap;
+    }
+
+    /* Divider */
+    .divider {
+      position: absolute;
+      top: 20px;
+      bottom: 20px;
+      left: calc(20px + 680px);
+      width: 1px;
+      background: rgba(0,0,0,0.1);
+    }
+
+    /* Add New Button */
+    #addNewButton {
+      padding: 8px 16px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal.active { display: flex; }
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 4px;
+      width: 300px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .modal-content h3 { margin-top: 0; }
+    .modal-content label {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    .modal-content input {
+      width: 100%;
+      padding: 6px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    .modal-actions { text-align: right; margin-top: 20px; }
+    .modal-actions button { margin-left: 10px; padding: 6px 12px; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div>
+      <h2 id="dashboardHeader">Dashboard</h2>
+      <a id="archiveTab">Archive</a>
+      <a id="wordingsTab">Wordings</a>
+    </div>
+    <a id="logout">Log Out</a>
+  </div>
+
+  <div class="main-content">
+    <h1>Active Projects</h1>
+    <div class="controls">
+      <div class="controls-left">
+        <input type="text" id="searchInput" placeholder="Search...">
+      </div>
+      <div class="controls-right">
+        <label for="sortSelect">Sort:</label>
+        <select id="sortSelect">
+          <option value="asc">A → Z</option>
+          <option value="desc">Z → A</option>
+        </select>
+        <label for="filterYearSelect">Year:</label>
+        <select id="filterYearSelect">
+          <option value="all">All</option>
+        </select>
+      </div>
+    </div>
+    <table id="projectTable">
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>Unread</th>
+          <th>Open</th>
+          <th>Archive</th>
+          <th>New Version</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <div class="divider"></div>
+    <button id="addNewButton">Add New</button>
+  </div>
+
+  <!-- Modal -->
+  <div id="projectModal" class="modal">
+    <div class="modal-content">
+      <h3 id="modalTitle">Add New Project</h3>
+      <label>Client:<input type="text" id="modalClient"></label>
+      <label>Programme:<input type="text" id="modalProgramme"></label>
+      <label>Year:<input type="number" id="modalYear"></label>
+      <div class="modal-actions">
+        <button id="modalCancel">Cancel</button>
+        <button id="modalSave">Create</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let projects = JSON.parse(localStorage.getItem('projects') || '[]');
+      let editIndex = null;
+      const searchInput = document.getElementById('searchInput');
+      const sortSelect = document.getElementById('sortSelect');
+      const filterYearSelect = document.getElementById('filterYearSelect');
+      const tableBody = document.querySelector('#projectTable tbody');
+      const addNewButton = document.getElementById('addNewButton');
+      const modal = document.getElementById('projectModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalClient = document.getElementById('modalClient');
+      const modalProgramme = document.getElementById('modalProgramme');
+      const modalYear = document.getElementById('modalYear');
+      const modalCancel = document.getElementById('modalCancel');
+      const modalSave = document.getElementById('modalSave');
+
+      function debounce(fn, ms) { let timer; return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), ms); }; }
+      function saveProjects() { localStorage.setItem('projects', JSON.stringify(projects)); }
+      function populateYearFilter() {
+        const years = new Set(projects.filter(p => !p.archived).map(p => p.year));
+        filterYearSelect.innerHTML = '<option value="all">All</option>';
+        Array.from(years).sort().forEach(y => { const opt = document.createElement('option'); opt.value = y; opt.textContent = y; filterYearSelect.appendChild(opt); });
+      }
+      function renderTable() {
+        const st = searchInput.value.toLowerCase();
+        const so = sortSelect.value;
+        const yf = filterYearSelect.value;
+        let list = projects.filter(p => !p.archived);
+        if (yf !== 'all') list = list.filter(p => String(p.year) === yf);
+        list = list.filter(p => p.name.toLowerCase().includes(st));
+        list.sort((a, b) => so === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
+        tableBody.innerHTML = '';
+        list.forEach(p => {
+          const idx = projects.indexOf(p);
+          const tr = document.createElement('tr');
+
+          const tdName = document.createElement('td');
+          tdName.textContent = p.name;
+          tr.appendChild(tdName);
+
+          const tdUnread = document.createElement('td');
+          tdUnread.textContent = p.unreadCount || 0;
+          tdUnread.style.textAlign = 'center';
+          tr.appendChild(tdUnread);
+
+          ['Open','Archive','New Version'].forEach(label => {
+            const td = document.createElement('td');
+            const btn = document.createElement('button');
+            btn.textContent = label;
+            if (label === 'Open') btn.onclick = () => { sessionStorage.setItem('currentProject', idx); window.location.href = 'index.html?skipRedirect=true#marketSheet'; };
+            if (label === 'Archive') btn.onclick = () => { p.archived = true; saveProjects(); populateYearFilter(); renderTable(); };
+            if (label === 'New Version') btn.onclick = () => openModal('New Version', idx);
+            td.appendChild(btn);
+            tr.appendChild(td);
+          });
+
+          tableBody.appendChild(tr);
+        });
+      }
+
+      const debR = debounce(renderTable, 300);
+      searchInput.addEventListener('input', debR);
+      sortSelect.addEventListener('change', renderTable);
+      filterYearSelect.addEventListener('change', renderTable);
+
+      function openModal(title, index = null) {
+        editIndex = index;
+        modalTitle.textContent = title;
+        if (index !== null) {
+          const p = projects[index];
+          modalClient.value = p.client;
+          modalProgramme.value = p.programme;
+          modalYear.value = p.year;
+        } else {
+          modalClient.value = '';
+          modalProgramme.value = '';
+          modalYear.value = '';
+        }
+        modal.classList.add('active');
+      }
+      function closeModal() { modal.classList.remove('active'); }
+      modalCancel.addEventListener('click', closeModal);
+      modalSave.addEventListener('click', () => {
+        const c = modalClient.value.trim();
+        const pr = modalProgramme.value.trim();
+        const yr = parseInt(modalYear.value, 10);
+        if (!c || !pr || isNaN(yr)) { alert('Please fill in all fields correctly.'); return; }
+        const name = `${c} – ${pr} – ${yr}`;
+        if (editIndex !== null) {
+          const old = projects[editIndex];
+          projects.push({ name, client: c, programme: pr, year: yr, marketSheetData: JSON.parse(JSON.stringify(old.marketSheetData || [])), emailDraftData: JSON.parse(JSON.stringify(old.emailDraftData || {})), archived: false, unreadCount: old.unreadCount || 0 });
+        } else {
+          projects.push({ name, client: c, programme: pr, year: yr, marketSheetData: [], emailDraftData: {}, archived: false, unreadCount: 0 });
+        }
+        saveProjects(); populateYearFilter(); renderTable(); closeModal();
+      });
+
+      addNewButton.addEventListener('click', () => openModal('Add New Project'));
+      document.getElementById('dashboardHeader').onclick = () => { populateYearFilter(); renderTable(); };
+      document.getElementById('archiveTab').onclick = () => alert('Archive view will be implemented later.');
+      document.getElementById('wordingsTab').onclick = () => alert('Wordings library will be implemented later.');
+      document.getElementById('logout').onclick = () => { localStorage.removeItem('loggedInUser'); window.location.href = 'login.html'; };
+
+      populateYearFilter();
+      renderTable();
+    });
+  </script>
+</body>
+</html>

@@ -97,7 +97,7 @@
       <button id="draftEmailsButton">Draft Emails</button>
     </div>
 
-    <!-- Email Drafting Tab Container (hidden by default, for testing you can add active) -->
+    <!-- Email Drafting Tab Container (hidden by default) -->
     <div id="emailDraftingTabContainer" class="tab-content"></div>
   </div>
 
@@ -119,18 +119,15 @@
     // Global flag to indicate if there are unsaved changes.
     let unsavedChanges = false;
     
-    // Example: Set unsavedChanges to true when any input changes.
     document.addEventListener('input', () => {
       unsavedChanges = true;
     });
 
-    // Save function: Replace the alert below with your actual save logic.
     function saveProgress() {
       alert('Progress saved.');
       unsavedChanges = false;
     }
 
-    // Exit function: Prompts the user if there are unsaved changes before exiting to dashboard.
     function exitToDashboard() {
       if (unsavedChanges) {
         if (confirm("You have unsaved changes. Do you want to save before exiting?")) {
@@ -146,7 +143,6 @@
       }
     }
 
-    // Add event listeners for Save and Exit buttons.
     document.getElementById('saveButton').addEventListener('click', function() {
       saveProgress();
     });
@@ -155,13 +151,11 @@
       exitToDashboard();
     });
 
-    // Make "Navigate" clickable to show the Market Sheet Tab.
     document.getElementById('navHeader').addEventListener('click', function() {
       document.getElementById('tabMarketSheet').classList.add('active');
       document.getElementById('emailDraftingTabContainer').classList.remove('active');
     });
 
-    // Sidebar tab switching.
     document.getElementById('menuMarketSheet').addEventListener('click', function (e) {
       e.preventDefault();
       document.getElementById('tabMarketSheet').classList.add('active');
@@ -173,14 +167,12 @@
       document.getElementById('emailDraftingTabContainer').classList.add('active');
     });
 
-    // Draft Emails Button: switch tabs.
     document.getElementById('draftEmailsButton').addEventListener('click', function () {
       document.getElementById('tabMarketSheet').classList.remove('active');
       document.getElementById('emailDraftingTabContainer').classList.add('active');
       window.scrollTo(0, 0);
     });
 
-    // Logo preview script.
     const logoUpload = document.getElementById('logoUpload');
     const logoPreview = document.getElementById('logoPreview');
     const logoLabel = document.getElementById('logoLabel');
