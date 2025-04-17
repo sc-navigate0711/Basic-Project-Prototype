@@ -182,3 +182,16 @@ body {
 }
 
 /* Optional: Add controls for font, text size, and color if needed later */
+/* make sure our thin divider never catches clicks */
+.divider {
+  pointer-events: none;
+}
+
+/* ensure every actual form element sits above overlays */
+.main-content input,
+.main-content select,
+.main-content textarea,
+.main-content button {
+  position: relative;
+  z-index: 1;
+}

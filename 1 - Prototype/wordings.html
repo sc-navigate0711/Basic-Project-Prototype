@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Wordings Library</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { margin:0; font-family:Arial,sans-serif; display:flex; height:100vh; overflow:hidden; }
+    .sidebar {
+      position:fixed; top:0; left:0; bottom:0; width:200px;
+      background:#001f3f; color:white; display:flex;
+      flex-direction:column; justify-content:space-between;
+      padding:20px; box-sizing:border-box;
+    }
+    .sidebar h2, .sidebar a {
+      color:white; text-decoration:none; margin-bottom:10px; cursor:pointer;
+    }
+    .sidebar a.logout { margin-top:auto; text-align:center; }
+    .sidebar a:hover { text-decoration:underline; }
+
+    .main-content {
+      margin-left:200px; padding:20px 100px 20px 20px;
+      overflow-y:auto; height:100vh; box-sizing:border-box;
+    }
+    .main-content h1 { margin:0 0 20px; font-size:24px; }
+
+    /* Saved Wordings Table */
+    #wordingsTable {
+      width:600px; border-collapse:collapse; table-layout:fixed; margin-bottom:20px;
+    }
+    #wordingsTable th, #wordingsTable td {
+      border:1px solid #ddd; padding:8px;
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap; vertical-align:middle;
+    }
+    #wordingsTable th { background:#001f3f; color:#fff; }
+    #wordingsTable th:nth-child(1), td:nth-child(1) { width:400px; text-align:left; }
+    #wordingsTable th:nth-child(2), td:nth-child(2),
+    #wordingsTable th:nth-child(3), td:nth-child(3) { width:100px; text-align:center; }
+    #wordingsTable td button {
+      width:100%; padding:4px 6px; font-size:12px;
+      cursor:pointer; box-sizing:border-box; white-space:nowrap;
+    }
+    .delete-icon {
+      cursor:pointer; font-size:16px; display:inline-block; line-height:1;
+    }
+
+    /* Form beneath table */
+    #wordingForm {
+      margin-top:20px;
+    }
+    #wordingForm input[type="text"] {
+      width:500px; font-size:24px; padding:10px;
+      border:1px solid #ccc; border-radius:4px;
+    }
+    #wordingForm textarea {
+      width:840px;
+      height:200px;
+      font-size:18px;
+      padding:8px;
+      border:1px solid #ccc;
+      border-radius:4px;
+    }
+    #wordingForm button {
+      padding:8px 16px; font-size:14px; cursor:pointer; margin-top:10px;
+    }
+    #wordingForm .placeholder-btn {
+      padding:5px 10px; font-size:16px; margin-right:10px; cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <div>
+      <h2><a href="dashboard.html">Dashboard</a></h2>
+    </div>
+    <a class="logout" href="login.html">Log Out</a>
+  </div>
+
+  <div class="main-content">
+    <h1>Wordings Library</h1>
+
+    <table id="wordingsTable">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div id="wordingForm">
+      <input type="text" id="wordingTitle" placeholder="Enter Wording Title" /><br/><br/>
+      <button class="placeholder-btn" id="phName">Name</button>
+      <button class="placeholder-btn" id="phSigned">Signed Lines</button>
+      <button class="placeholder-btn" id="phMarket">Market</button>
+      <button class="placeholder-btn" id="phCustom">Custom</button>
+      <br/><br/>
+      <textarea id="wordingContent"
+        placeholder="Type your wording here. Use [Name], [Signed Lines], [Market], [Custom]…"></textarea>
+      <br/>
+      <button id="saveWording">Save</button>
+    </div>
+  </div>
+
+  <script src="modules/wordings.js"></script>
+</body>
+</html>

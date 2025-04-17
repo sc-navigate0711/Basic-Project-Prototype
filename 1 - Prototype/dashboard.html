@@ -38,7 +38,13 @@
       margin-bottom: 10px;
       display: block;
     }
-    .sidebar a:hover { text-decoration: underline; }
+    .sidebar a.logout {
+      margin-top: auto;
+      text-align: center;
+    }
+    .sidebar a:hover {
+      text-decoration: underline;
+    }
 
     /* Main Content */
     .main-content {
@@ -84,8 +90,8 @@
 
     /* Table: fixed width */
     #projectTable {
-      width: 680px;
-      min-width: 680px;
+      width: 740px;
+      min-width: 740px;
       border-collapse: collapse;
       table-layout: fixed;
       margin-bottom: 20px;
@@ -99,13 +105,30 @@
       white-space: nowrap;
       vertical-align: middle;
     }
-    #projectTable th { background-color: #001f3f; color: #fff; }
+    #projectTable th {
+      background-color: #001f3f;
+      color: #fff;
+    }
     /* Column widths */
-    #projectTable th:nth-child(1), td:nth-child(1) { width: 300px; text-align: left; }
-    #projectTable th:nth-child(2), td:nth-child(2) { width: 80px; text-align: center; }
-    #projectTable th:nth-child(3), td:nth-child(3),
-    #projectTable th:nth-child(4), td:nth-child(4),
-    #projectTable th:nth-child(5), td:nth-child(5) { width: 100px; text-align: center; }
+    #projectTable th:nth-child(1),
+    #projectTable td:nth-child(1) {
+      width: 300px;
+      text-align: left;
+    }
+    #projectTable th:nth-child(2),
+    #projectTable td:nth-child(2) {
+      width: 80px;
+      text-align: center;
+    }
+    #projectTable th:nth-child(3),
+    #projectTable td:nth-child(3),
+    #projectTable th:nth-child(4),
+    #projectTable td:nth-child(4),
+    #projectTable th:nth-child(5),
+    #projectTable td:nth-child(5) {
+      width: 120px;
+      text-align: center;
+    }
     #projectTable td button {
       width: 100%;
       padding: 4px 6px;
@@ -114,14 +137,15 @@
       display: block;
       box-sizing: border-box;
       white-space: nowrap;
+      cursor: pointer;
     }
 
-    /* Divider */
+    /* Divider: 20px gap from table */
     .divider {
       position: absolute;
       top: 20px;
       bottom: 20px;
-      left: calc(20px + 680px);
+      left: calc(20px + 740px + 20px);
       width: 1px;
       background: rgba(0,0,0,0.1);
     }
@@ -137,8 +161,10 @@
     .modal {
       display: none;
       position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       background: rgba(0,0,0,0.5);
       justify-content: center;
       align-items: center;
@@ -163,18 +189,26 @@
       font-size: 14px;
       box-sizing: border-box;
     }
-    .modal-actions { text-align: right; margin-top: 20px; }
-    .modal-actions button { margin-left: 10px; padding: 6px 12px; font-size: 14px; }
+    .modal-actions {
+      text-align: right;
+      margin-top: 20px;
+    }
+    .modal-actions button {
+      margin-left: 10px;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <div class="sidebar">
     <div>
       <h2 id="dashboardHeader">Dashboard</h2>
-      <a id="archiveTab">Archive</a>
-      <a id="wordingsTab">Wordings</a>
+      <a href="archive.html" id="archiveTab">Archive</a>
+      <a href="wordings.html" id="wordingsTab">Wordings</a>
     </div>
-    <a id="logout">Log Out</a>
+    <a id="logout" class="logout">Log Out</a>
   </div>
 
   <div class="main-content">
@@ -195,6 +229,7 @@
         </select>
       </div>
     </div>
+
     <table id="projectTable">
       <thead>
         <tr>
@@ -207,7 +242,9 @@
       </thead>
       <tbody></tbody>
     </table>
+
     <div class="divider"></div>
+
     <button id="addNewButton">Add New</button>
   </div>
 
@@ -242,12 +279,25 @@
       const modalCancel = document.getElementById('modalCancel');
       const modalSave = document.getElementById('modalSave');
 
-      function debounce(fn, ms) { let timer; return (...args) => { clearTimeout(timer); timer = setTimeout(() => fn(...args), ms); }; }
-      function saveProjects() { localStorage.setItem('projects', JSON.stringify(projects)); }
+      function debounce(fn, ms) {
+        let timer;
+        return (...args) => {
+          clearTimeout(timer);
+          timer = setTimeout(() => fn(...args), ms);
+        };
+      }
+      function saveProjects() {
+        localStorage.setItem('projects', JSON.stringify(projects));
+      }
       function populateYearFilter() {
         const years = new Set(projects.filter(p => !p.archived).map(p => p.year));
         filterYearSelect.innerHTML = '<option value="all">All</option>';
-        Array.from(years).sort().forEach(y => { const opt = document.createElement('option'); opt.value = y; opt.textContent = y; filterYearSelect.appendChild(opt); });
+        Array.from(years).sort().forEach(y => {
+          const opt = document.createElement('option');
+          opt.value = y;
+          opt.textContent = y;
+          filterYearSelect.appendChild(opt);
+        });
       }
       function renderTable() {
         const st = searchInput.value.toLowerCase();
@@ -256,38 +306,37 @@
         let list = projects.filter(p => !p.archived);
         if (yf !== 'all') list = list.filter(p => String(p.year) === yf);
         list = list.filter(p => p.name.toLowerCase().includes(st));
-        list.sort((a, b) => so === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name));
+        list.sort((a, b) => so === 'asc'
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name)
+        );
         tableBody.innerHTML = '';
-        list.forEach(p => {
-          const idx = projects.indexOf(p);
+        list.forEach((p, idx) => {
           const tr = document.createElement('tr');
-
-          const tdName = document.createElement('td');
-          tdName.textContent = p.name;
-          tr.appendChild(tdName);
-
-          const tdUnread = document.createElement('td');
-          tdUnread.textContent = p.unreadCount || 0;
-          tdUnread.style.textAlign = 'center';
-          tr.appendChild(tdUnread);
-
-          ['Open','Archive','New Version'].forEach(label => {
-            const td = document.createElement('td');
-            const btn = document.createElement('button');
-            btn.textContent = label;
-            if (label === 'Open') btn.onclick = () => { sessionStorage.setItem('currentProject', idx); window.location.href = 'index.html?skipRedirect=true#marketSheet'; };
-            if (label === 'Archive') btn.onclick = () => { p.archived = true; saveProjects(); populateYearFilter(); renderTable(); };
-            if (label === 'New Version') btn.onclick = () => openModal('New Version', idx);
-            td.appendChild(btn);
-            tr.appendChild(td);
-          });
-
+          tr.innerHTML = `
+            <td>${p.name}</td>
+            <td style="text-align:center">${p.unreadCount || 0}</td>
+            <td><button onclick="openProject(${idx})">Open</button></td>
+            <td><button onclick="archiveProject(${idx})">Archive</button></td>
+            <td><button onclick="newVersion(${idx})">New Version</button></td>
+          `;
           tableBody.appendChild(tr);
         });
       }
 
-      const debR = debounce(renderTable, 300);
-      searchInput.addEventListener('input', debR);
+      window.openProject = i => {
+        sessionStorage.setItem('currentProject', i);
+        location.href = 'index.html?skipRedirect=true#marketSheet';
+      };
+      window.archiveProject = i => {
+        projects[i].archived = true;
+        saveProjects();
+        populateYearFilter();
+        renderTable();
+      };
+      window.newVersion = i => openModal('New Version', i);
+
+      searchInput.addEventListener('input', debounce(renderTable, 300));
       sortSelect.addEventListener('change', renderTable);
       filterYearSelect.addEventListener('change', renderTable);
 
@@ -306,31 +355,73 @@
         }
         modal.classList.add('active');
       }
-      function closeModal() { modal.classList.remove('active'); }
+      function closeModal() {
+        modal.classList.remove('active');
+      }
       modalCancel.addEventListener('click', closeModal);
       modalSave.addEventListener('click', () => {
         const c = modalClient.value.trim();
         const pr = modalProgramme.value.trim();
         const yr = parseInt(modalYear.value, 10);
-        if (!c || !pr || isNaN(yr)) { alert('Please fill in all fields correctly.'); return; }
+        if (!c || !pr || isNaN(yr)) {
+          alert('Please fill in all fields correctly.');
+          return;
+        }
         const name = `${c} – ${pr} – ${yr}`;
         if (editIndex !== null) {
           const old = projects[editIndex];
-          projects.push({ name, client: c, programme: pr, year: yr, marketSheetData: JSON.parse(JSON.stringify(old.marketSheetData || [])), emailDraftData: JSON.parse(JSON.stringify(old.emailDraftData || {})), archived: false, unreadCount: old.unreadCount || 0 });
+          projects.push({
+            name,
+            client: c,
+            programme: pr,
+            year: yr,
+            marketSheetData: JSON.parse(JSON.stringify(old.marketSheetData || [])),
+            emailDraftData: JSON.parse(JSON.stringify(old.emailDraftData || {})),
+            archived: false,
+            unreadCount: old.unreadCount || 0
+          });
         } else {
-          projects.push({ name, client: c, programme: pr, year: yr, marketSheetData: [], emailDraftData: {}, archived: false, unreadCount: 0 });
+          projects.push({
+            name,
+            client: c,
+            programme: pr,
+            year: yr,
+            marketSheetData: [],
+            emailDraftData: {},
+            archived: false,
+            unreadCount: 0
+          });
         }
-        saveProjects(); populateYearFilter(); renderTable(); closeModal();
+        saveProjects();
+        populateYearFilter();
+        renderTable();
+        closeModal();
       });
 
       addNewButton.addEventListener('click', () => openModal('Add New Project'));
-      document.getElementById('dashboardHeader').onclick = () => { populateYearFilter(); renderTable(); };
-      document.getElementById('archiveTab').onclick = () => alert('Archive view will be implemented later.');
-      document.getElementById('wordingsTab').onclick = () => alert('Wordings library will be implemented later.');
-      document.getElementById('logout').onclick = () => { localStorage.removeItem('loggedInUser'); window.location.href = 'login.html'; };
+      document.getElementById('dashboardHeader').addEventListener('click', () => {
+        populateYearFilter(); renderTable();
+      });
+      document.getElementById('archiveTab').addEventListener('click', () => {
+        window.location.href = 'archive.html';
+      });
+      // the Wordings link now just uses its href, so no JS handler here
+
+      document.getElementById('logout').addEventListener('click', () => {
+        localStorage.removeItem('loggedInUser');
+        location.href = 'login.html';
+      });
 
       populateYearFilter();
       renderTable();
+    });
+
+    // debug logs
+    window.addEventListener('focusin', e => {
+      console.log('FOCUSIN:', e.target.tagName, `"${e.target.id||e.target.className}"`);
+    });
+    window.addEventListener('keydown', e => {
+      console.log('KEYDOWN:', e.key, 'on', document.activeElement.tagName, `"${document.activeElement.id}"`);
     });
   </script>
 </body>

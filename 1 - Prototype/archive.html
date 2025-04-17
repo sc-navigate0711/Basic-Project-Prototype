@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Archived Projects</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    /* —— same dashboard CSS for layout —— */
+    body {
+      margin: 0; font-family: Arial, sans-serif;
+      display: flex; height: 100vh; overflow: hidden;
+    }
+    .sidebar {
+      position: fixed; top: 0; left: 0; bottom: 0;
+      width: 200px; background: #001f3f; color: white;
+      display: flex; flex-direction: column;
+      justify-content: space-between; padding: 20px;
+      box-sizing: border-box;
+    }
+    .sidebar h2, .sidebar a {
+      color: white; text-decoration: none;
+      margin-bottom: 10px; cursor: pointer;
+    }
+    .sidebar a.logout { margin-top: auto; text-align: center; }
+    .sidebar a:hover { text-decoration: underline; }
+
+    .main-content {
+      position: relative; margin-left: 200px;
+      padding: 20px 100px 20px 20px;
+      overflow-y: auto; height: 100vh; box-sizing: border-box;
+    }
+    .main-content h1 { margin:0 0 20px; font-size:24px; }
+
+    .controls {
+      display:flex; justify-content:space-between;
+      align-items:center; margin-bottom:20px;
+    }
+    .controls-left input {
+      width:200px; padding:6px; font-size:14px;
+    }
+    .controls-right {
+      display:flex; align-items:center;
+    }
+    .controls-right label {
+      margin-left:20px; font-size:14px; white-space:nowrap;
+    }
+    .controls-right select {
+      width:120px; padding:6px; margin-left:5px; font-size:14px;
+    }
+
+    /* Table with 5 columns:
+       Project (300px), Unread (80px),
+       Open (120px), Unarchive (120px), Delete (80px) */
+    #archiveTable {
+      width: 740px; min-width:740px;
+      border-collapse: collapse; table-layout: fixed;
+      margin-bottom: 20px;
+    }
+    #archiveTable th, #archiveTable td {
+      border:1px solid #ddd; padding:8px;
+      overflow:hidden; text-overflow:ellipsis;
+      white-space:nowrap; vertical-align:middle;
+    }
+    #archiveTable th { background:#001f3f; color:#fff; }
+
+    /* column widths */
+    #archiveTable th:nth-child(1), td:nth-child(1) { width:300px; text-align:left; }
+    #archiveTable th:nth-child(2), td:nth-child(2) { width:80px; text-align:center; }
+    #archiveTable th:nth-child(3), td:nth-child(3),
+    #archiveTable th:nth-child(4), td:nth-child(4) { width:120px; text-align:center; }
+    #archiveTable th:nth-child(5), td:nth-child(5) { width:80px; text-align:center; }
+
+    /* BUTTONS: mirror dashboard styles for Open & Unarchive */
+    #archiveTable td button {
+      width: 100%;
+      padding: 4px 6px;
+      font-size: 12px;
+      margin: 0 auto;
+      display: block;
+      box-sizing: border-box;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+
+    /* Trash icon styling (inline span) */
+    .delete-icon {
+      cursor: pointer;
+      font-size: 16px;
+      display: inline-block;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2><a href="dashboard.html">Dashboard</a></h2>
+    <a class="logout" href="login.html">Log Out</a>
+  </div>
+
+  <div class="main-content">
+    <h1>Archived Projects</h1>
+    <div class="controls">
+      <div class="controls-left">
+        <input id="searchArchiveInput" placeholder="Search...">
+      </div>
+      <div class="controls-right">
+        <label for="sortArchiveSelect">Sort:</label>
+        <select id="sortArchiveSelect">
+          <option value="asc">A → Z</option>
+          <option value="desc">Z → A</option>
+        </select>
+        <label for="filterArchiveYearSelect">Year:</label>
+        <select id="filterArchiveYearSelect">
+          <option value="all">All</option>
+        </select>
+      </div>
+    </div>
+
+    <table id="archiveTable">
+      <thead>
+        <tr>
+          <th>Project</th>
+          <th>Unread</th>
+          <th>Open</th>
+          <th>Unarchive</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script src="modules/archive.js"></script>
+</body>
+</html>
