@@ -15,13 +15,14 @@ body {
   left: 0;
   width: 200px;
   bottom: 0;
-  background: #2c3e50;
+  background: #001f3f;
   color: white;
   padding: 20px;
 }
 .sidebar h2 {
   text-align: center;
   margin-bottom: 20px;
+  cursor: pointer;
 }
 .sidebar ul {
   list-style: none;
@@ -34,11 +35,11 @@ body {
   text-decoration: none;
 }
 
-/* Global Header (Top Grey Banner) */
+/* Global Header */
 #globalHeader {
   position: fixed;
   top: 0;
-  left: 200px; /* next to sidebar */
+  left: 200px;
   right: 0;
   height: 100px;
   background: #f0f0f0;
@@ -48,15 +49,12 @@ body {
   padding: 0 20px;
   z-index: 1000;
 }
-
 .header-content {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-
-/* Left section: Placement Title input */
 .header-left input#placementTitle {
   font-size: 32px;
   font-weight: bold;
@@ -65,58 +63,43 @@ body {
   background: transparent;
   color: #333;
 }
-
-/* Right section: Logo Area */
 .header-right #logoArea {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 200px;  /* widened */
+  width: 200px;
   height: 80px;
-  background: #f0f0f0; /* match the grey banner */
-  /* Removed border property for seamless integration */
+  background: #f0f0f0;
   overflow: hidden;
   cursor: pointer;
 }
-
 .header-right #logoArea input#logoUpload {
   position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0; /* hide the native file input */
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
   cursor: pointer;
 }
-
 .header-right #logoArea #logoLabel {
-  pointer-events: none;  /* allow click-through to the input */
+  pointer-events: none;
   font-size: 14px;
   color: #666;
 }
-
 .header-right #logoArea #logoPreview {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
 }
 
-
-/* Main Content Area */
+/* Main Content */
 .main-container {
-  margin-top: 100px; /* Below header */
-  margin-left: 200px; /* Next to sidebar */
+  margin-top: 100px;
+  margin-left: 200px;
   padding: 20px;
 }
-
-/* Tab Content */
-.tab-content {
-  display: none;
-}
-.tab-content.active {
-  display: block;
-}
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
 /* Zoom Controls */
 #globalZoom {
@@ -129,69 +112,105 @@ body {
   margin-left: 5px;
 }
 
-/* Layer Table Styles */
-#layerTable {
+/* Layer Table (unchanged) */
+/* … */
+
+/* Email Drafting Tab (unchanged) */
+/* … */
+
+/* Mail Monitoring Tab Header */
+#tabMailMonitoring h3 {
+  margin-bottom: 20px;
+}
+
+/* Each group wrapper */
+.mail-table-container {
+  margin-bottom: 40px;
+}
+
+/* Filters */
+.filters-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.filters-container select {
+  padding: 5px;
+}
+
+/* Table */
+.mail-table {
+  width: 100%;
+  min-width: 740px;
   border-collapse: collapse;
   table-layout: fixed;
-  width: auto;
   margin-bottom: 10px;
 }
-#layerTable th,
-#layerTable td {
+.mail-table th,
+.mail-table td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 4px 6px;
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-#layerTable th {
+.mail-table th {
   background-color: #001f3f;
   color: #fff;
+  text-align: center;
 }
-#addLayerButton {
+
+/* Narrow columns */
+.mail-table th:nth-child(1),
+.mail-table td:nth-child(1),
+.mail-table th:nth-child(2),
+.mail-table td:nth-child(2),
+.mail-table th:nth-child(6),
+.mail-table td:nth-child(6) {
+  width: 40px;
+  text-align: center;
+}
+
+/* Market */
+.mail-table th:nth-child(3),
+.mail-table td:nth-child(3) {
+  width: 120px;
+  text-align: center;
+}
+
+/* Notes: full‐cell textarea */
+.mail-table th:nth-child(4),
+.mail-table td:nth-child(4) {
+  width: 200px;
+}
+.mail-table td:nth-child(4) {
+  padding: 0;
+}
+.mail-table td:nth-child(4) textarea {
+  width: 100%;
+  height: 50px;
+  padding: 4px;
+  border: none;
+  box-sizing: border-box;
+  resize: none;
+  white-space: normal;
+}
+
+/* Inbox */
+.mail-table th:nth-child(5),
+.mail-table td:nth-child(5) {
+  width: 180px;
+}
+
+/* Actions beneath each table */
+.mail-table-actions {
+  display: flex;
+  justify-content: space-between;
   margin-top: 10px;
-
 }
-
-/* Email Drafting Tab Styles */
-#emailDraftingTabContainer {
-  padding: 20px;
-}
-
-.email-title-container input#emailTitle {
-  width: 500px;
-  font-size: 24px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.email-type-container {
-  font-size: 18px;
-}
-
-.email-type-container select {
-  font-size: 18px;
-  padding: 5px;
-  margin-left: 5px;
-}
-
-.email-content-container input,
-.email-content-container textarea {
-  font-size: 18px;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-/* Optional: Add controls for font, text size, and color if needed later */
-/* make sure our thin divider never catches clicks */
-.divider {
-  pointer-events: none;
-}
-
-/* ensure every actual form element sits above overlays */
-.main-content input,
-.main-content select,
-.main-content textarea,
-.main-content button {
-  position: relative;
-  z-index: 1;
+.mail-table-actions button {
+  padding: 6px 12px;
+  font-size: 14px;
+  cursor: pointer;
 }

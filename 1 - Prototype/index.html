@@ -6,7 +6,12 @@
   <title>Navigate Prototype</title>
   <link rel="stylesheet" href="styles.css" />
   <style>
-    /* Sidebar Footer: Position these buttons at the bottom of the fixed sidebar */
+    /* Override sidebar color to match dashboard */
+    .sidebar {
+      background: #001f3f !important;
+    }
+
+    /* Sidebar Footer */
     .sidebar-footer {
       position: absolute;
       bottom: 20px;
@@ -14,7 +19,6 @@
       width: calc(100% - 40px);
       text-align: center;
     }
-    /* Updated button styles using inline SVG icons and labels */
     .sidebar-footer button {
       background: none;
       border: none;
@@ -23,19 +27,79 @@
       margin: 0 10px;
       display: inline-block;
     }
-    .sidebar-footer button .btn-icon {
+    .sidebar-footer .btn-icon {
       display: block;
       margin: 0 auto;
       width: 24px;
       height: 24px;
     }
-    .sidebar-footer button .btn-label {
+    .sidebar-footer .btn-label {
       font-size: 12px;
       margin-top: 5px;
     }
-    /* Make the sidebar header clickable */
-    .sidebar h2 {
-      cursor: pointer;
+    .sidebar h2 { cursor: pointer; }
+
+    /* Mail‑Monitoring styling (overrides) */
+    .mail-table-container {
+      margin-bottom: 40px;
+    }
+    .mail-table-header {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .filters-container {
+      margin-bottom: 15px;
+    }
+    .filters-container select {
+      padding: 5px;
+      margin-right: 10px;
+    }
+    .mail-table {
+      width: 100%;
+      min-width: 740px;
+      border-collapse: collapse;
+      table-layout: fixed;
+      margin-bottom: 10px;
+    }
+    .mail-table th,
+    .mail-table td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    .mail-table th {
+      background: #001f3f;
+      color: white;
+      text-align: center;
+    }
+    .mail-table td.center {
+      text-align: center;
+    }
+    /* fixed column widths */
+    .mail-table th:nth-child(1), .mail-table td:nth-child(1) { width:50px; }
+    .mail-table th:nth-child(2), .mail-table td:nth-child(2) { width:60px; }
+    .mail-table th:nth-child(3), .mail-table td:nth-child(3) { width:120px; }
+    .mail-table th:nth-child(4), .mail-table td:nth-child(4) { width:180px; }
+    .mail-table th:nth-child(5), .mail-table td:nth-child(5) { width:180px; }
+    .mail-table th:nth-child(6), .mail-table td:nth-child(6) { width:70px; }
+    /* Notes cell full textarea */
+    .mail-table td textarea {
+      width: 100%;
+      height: 50px;
+      padding: 5px;
+      resize: none;
+      border: none;
+      background: transparent;
+      box-sizing: border-box;
+    }
+    .mail-table-actions {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
     }
   </style>
 </head>
@@ -46,31 +110,28 @@
     <ul>
       <li><a href="#" id="menuMarketSheet">Market Sheet</a></li>
       <li><a href="#" id="menuEmailDrafting">Email Drafting</a></li>
+      <li><a href="#" id="menuMailMonitoring">Mail Monitoring</a></li>
+      <li><a href="#" id="menuEmailArchive">Email Archive</a></li>
     </ul>
-    <!-- Sidebar Footer with Save and Exit Buttons -->
     <div class="sidebar-footer">
       <button id="saveButton" title="Save">
         <div class="btn-icon">
-          <!-- Save Icon SVG (white) -->
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
-            <path d="M17,3H5C3.89,3 3,3.89 3,5V19C3,20.1 3.89,21 5,21H19C20.1,21 21,20.1 21,19V7L17,3M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M16,9H5V5H16V9Z" />
-          </svg>
+          <!-- Save SVG -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M17,3H5C3.89,3 3,3.89 3,5V19C3,20.1 3.89,21 5,21H19C20.1,21 21,20.1 21,19V7L17,3M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M16,9H5V5H16V9Z"/></svg>
         </div>
         <div class="btn-label">Save</div>
       </button>
       <button id="exitButton" title="Exit">
         <div class="btn-icon">
-          <!-- Exit Icon SVG (white) -->
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px">
-            <path d="M20,3H4A1,1 0 0,0 3,4V20A1,1 0 0,0 4,21H20A1,1 0 0,0 21,20V4A1,1 0 0,0 20,3M10,16H8V8H10V16Z" />
-          </svg>
+          <!-- Exit SVG -->
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white"><path d="M20,3H4A1,1 0 0,0 3,4V20A1,1 0 0,0 4,21H20A1,1 0 0,0 21,20V4A1,1 0 0,0 20,3M10,16H8V8H10V16Z"/></svg>
         </div>
         <div class="btn-label">Exit</div>
       </button>
     </div>
   </div>
 
-  <!-- Top Grey Banner / Global Header (unchanged) -->
+  <!-- Global Header -->
   <div id="globalHeader">
     <div class="header-content">
       <div class="header-left">
@@ -80,28 +141,32 @@
         <div id="logoArea">
           <label for="logoUpload" id="logoLabel">Upload Logo</label>
           <input type="file" id="logoUpload" accept="image/*" />
-          <img id="logoPreview" src="" alt="" style="display: none;" />
+          <img id="logoPreview" style="display:none;" />
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Main Content Area -->
+  <!-- Main Content -->
   <div class="main-container">
-    <!-- Market Sheet Tab Container (visible by default) -->
+    <!-- Market Sheet Tab -->
     <div id="tabMarketSheet" class="tab-content active">
       <h3>Market Sheet</h3>
-      <div id="marketSheetContainer">
-        <p>This is the Market Sheet. (Placeholder)</p>
-      </div>
-      <button id="draftEmailsButton">Draft Emails</button>
+      <div id="marketSheetContainer"></div>
+      <button id="draftEmailsButton">Draft Selected Emails</button>
     </div>
 
-    <!-- Email Drafting Tab Container (hidden by default) -->
+    <!-- Email Drafting Tab -->
     <div id="emailDraftingTabContainer" class="tab-content"></div>
+
+    <!-- Mail Monitoring Tab -->
+    <div id="tabMailMonitoring" class="tab-content"></div>
+
+    <!-- Email Archive Tab -->
+    <div id="tabEmailArchive" class="tab-content"></div>
   </div>
 
-  <!-- Fixed Zoom Controls (unchanged) -->
+  <!-- Zoom Controls -->
   <div id="globalZoom">
     <button id="zoomIn">Zoom In</button>
     <button id="zoomOut">Zoom Out</button>
@@ -115,82 +180,70 @@
   <script src="modules/marketSheetTable.js"></script>
   <script src="modules/emailDrafting.js"></script>
   <script src="modules/emailPreview.js"></script>
+  <script src="modules/wordings.js"></script>
+  <script src="modules/mailMonitoring.js"></script>
+  <script src="modules/emailArchive.js"></script>
   <script>
-    // Global flag to indicate if there are unsaved changes.
-    let unsavedChanges = false;
-    
-    document.addEventListener('input', () => {
-      unsavedChanges = true;
-    });
-
-    function saveProgress() {
-      alert('Progress saved.');
-      unsavedChanges = false;
+    // Redirect if logged in & no hash
+    if (localStorage.getItem('loggedInUser') && window.location.hash === '') {
+      window.location.replace('dashboard.html');
     }
 
-    function exitToDashboard() {
-      if (unsavedChanges) {
-        if (confirm("You have unsaved changes. Do you want to save before exiting?")) {
-          saveProgress();
-          window.location.href = 'dashboard.html';
+    document.addEventListener('DOMContentLoaded', () => {
+      // Populate placement title
+      const projIdx = sessionStorage.getItem('currentProject');
+      if (projIdx !== null) {
+        const projects = JSON.parse(localStorage.getItem('projects') || '[]');
+        const proj = projects[projIdx];
+        if (proj) document.getElementById('placementTitle').value = proj.name;
+      }
+
+      // Save/Exit
+      let unsaved = false;
+      document.addEventListener('input', () => unsaved = true);
+      const saveProgress = () => { alert('Progress saved.'); unsaved = false; };
+      const exitToDashboard = () => {
+        if (unsaved) {
+          if (confirm('Save before exit?')) { saveProgress(); location='dashboard.html'; }
+          else if (confirm('Exit without saving?')) location='dashboard.html';
+        } else location='dashboard.html';
+      };
+      document.getElementById('saveButton').onclick = saveProgress;
+      document.getElementById('exitButton').onclick = exitToDashboard;
+
+      // Logo preview
+      const logoUpload = document.getElementById('logoUpload'),
+            logoPreview = document.getElementById('logoPreview'),
+            logoLabel   = document.getElementById('logoLabel');
+      logoUpload.onchange = function(){
+        const file = this.files[0];
+        if (file) {
+          const r = new FileReader();
+          r.onload = e=> {
+            logoPreview.src = e.target.result;
+            logoPreview.style.display = 'block';
+            logoLabel.style.display = 'none';
+          };
+          r.readAsDataURL(file);
         } else {
-          if (confirm("Are you sure you want to exit without saving?")) {
-            window.location.href = 'dashboard.html';
-          }
+          logoPreview.style.display='none';
+          logoLabel.style.display='block';
         }
-      } else {
-        window.location.href = 'dashboard.html';
-      }
-    }
+      };
 
-    document.getElementById('saveButton').addEventListener('click', function() {
-      saveProgress();
-    });
+      // Tab navigation helper
+      const show = id => {
+        document.querySelectorAll('.tab-content')
+                .forEach(t=>t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+      };
 
-    document.getElementById('exitButton').addEventListener('click', function() {
-      exitToDashboard();
-    });
-
-    document.getElementById('navHeader').addEventListener('click', function() {
-      document.getElementById('tabMarketSheet').classList.add('active');
-      document.getElementById('emailDraftingTabContainer').classList.remove('active');
-    });
-
-    document.getElementById('menuMarketSheet').addEventListener('click', function (e) {
-      e.preventDefault();
-      document.getElementById('tabMarketSheet').classList.add('active');
-      document.getElementById('emailDraftingTabContainer').classList.remove('active');
-    });
-    document.getElementById('menuEmailDrafting').addEventListener('click', function (e) {
-      e.preventDefault();
-      document.getElementById('tabMarketSheet').classList.remove('active');
-      document.getElementById('emailDraftingTabContainer').classList.add('active');
-    });
-
-    document.getElementById('draftEmailsButton').addEventListener('click', function () {
-      document.getElementById('tabMarketSheet').classList.remove('active');
-      document.getElementById('emailDraftingTabContainer').classList.add('active');
-      window.scrollTo(0, 0);
-    });
-
-    const logoUpload = document.getElementById('logoUpload');
-    const logoPreview = document.getElementById('logoPreview');
-    const logoLabel = document.getElementById('logoLabel');
-    logoUpload.addEventListener('change', function () {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          logoPreview.src = e.target.result;
-          logoPreview.style.display = 'block';
-          logoLabel.style.display = 'none';
-        };
-        reader.readAsDataURL(file);
-      } else {
-        logoPreview.src = '';
-        logoPreview.style.display = 'none';
-        logoLabel.style.display = 'block';
-      }
+      document.getElementById('navHeader').onclick             = ()=>show('tabMarketSheet');
+      document.getElementById('menuMarketSheet').onclick       = e=>{e.preventDefault(); show('tabMarketSheet');};
+      document.getElementById('menuEmailDrafting').onclick     = e=>{e.preventDefault(); show('emailDraftingTabContainer');};
+      document.getElementById('menuMailMonitoring').onclick    = e=>{e.preventDefault(); show('tabMailMonitoring'); loadMailMonitoringTab();};
+      document.getElementById('menuEmailArchive').onclick      = e=>{e.preventDefault(); show('tabEmailArchive'); loadEmailArchiveTab();};
+      document.getElementById('draftEmailsButton').onclick     = ()=>{ show('emailDraftingTabContainer'); window.scrollTo(0,0); };
     });
   </script>
 </body>

@@ -86,7 +86,6 @@ function generateEmailPreviews() {
   rows.forEach(row => {
     const checkbox = row.querySelector("input[type='checkbox'].rowSelect");
     if (!checkbox || !checkbox.checked) return;
-    // Market is still in cell index 2.
     const marketName = row.cells[2]?.querySelector('input')?.value.trim();
     if (marketName) uniqueMarkets.add(marketName);
   });
@@ -146,8 +145,6 @@ function generateEmailPreviews() {
     let combinedAttachments = attachmentAll ? (rowAttachments ? `${rowAttachments}, ${attachmentAll}` : attachmentAll) : rowAttachments;
 
     // 🔁 Build Signed Line List for this market
-    // Since dynamic layer columns now start at index 9 (after the 2 new fixed columns: Notes and Complete),
-    // we shift the index from 7 to 9.
     const signedLineList = [];
     for (let i = 0; i < layerTitles.length; i++) {
       const cell = row.cells[9 + i];
@@ -167,7 +164,8 @@ function generateEmailPreviews() {
     // 🔄 Replace placeholders
     const body = unifiedContent
       .replace(/\[Name\]/gi, underwriter)
-      .replace(/\[Signed Lines\]/gi, signedLineText);
+      .replace(/\[Signed Lines\]/gi, signedLineText)
+      .replace(/\[Market\]/gi, marketName); // Added Market placeholder
 
     const card = document.createElement('div');
     card.className = 'email-preview-card';
